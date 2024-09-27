@@ -2,3 +2,4 @@ pandas
 pyarrow
 pathlib
 sqlite3
+logging
