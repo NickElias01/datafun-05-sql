@@ -1,6 +1,10 @@
 import sqlite3
 import pathlib
 import pandas as pd
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Define paths for SQL files and database
 base_dir = pathlib.Path(__file__).parent
@@ -21,8 +25,16 @@ def create_database(db_path):
 
 # Read SQL from a file and execute it
 def execute_sql_from_file(db_path, sql_file):
-    with open(sql_file, 'r') as file:
-        sql_script = file.read()
+    try:
+        with open(sql_file, 'r') as file:
+            sql_script = file.read()
+    except FileNotFoundError:
+        print(f"Error: The file {sql_file} was not found.")
+        return
+    except Exception as e:
+        print(f"Error reading the SQL file: {e}")
+        return
+
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.executescript(sql_script)
@@ -52,9 +64,17 @@ def main():
     paths_to_verify = [db_file_path, author_data_path, book_data_path]
     verify_and_create_folders(paths_to_verify)
     
+    logging.info("Creating database...")
     create_database(db_file_path)
+    
+    logging.info("Creating tables...")
     create_tables(db_file_path, sql_dir)
+    
+    logging.info("Inserting data from CSV...")
     insert_data_from_csv(db_file_path, author_data_path, book_data_path)
+    
+    logging.info("Data insertion complete.")
+
 
 if __name__ == "__main__":
     main()
