@@ -1,3 +1,24 @@
+"""
+db_initialize_nickelias.py
+
+This script initializes a SQLite database for the project. It performs the following operations:
+1. Creates a new SQLite database if it does not exist.
+2. Executes SQL commands to create necessary tables as defined in SQL files.
+3. Populates the tables with data from specified CSV files.
+
+Dependencies:
+- sqlite3: for database operations.
+- pathlib: for handling file paths.
+- pandas: for reading CSV files and inserting data into the database.
+
+Usage:
+Run this script to set up the database and tables, and populate them with initial data.
+
+Example:
+    python db_initialize_nickelias.py
+"""
+
+
 import sqlite3
 import pathlib
 import pandas as pd
